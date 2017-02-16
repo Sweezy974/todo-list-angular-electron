@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as Datastore from 'nedb';
+import * as Datastore from 'mysql';
 
 @Injectable()
 
@@ -38,7 +38,7 @@ export class DbService {
         err ? console.error(err) :numReplaced;
         });
     }
- 
+
 
 
 
