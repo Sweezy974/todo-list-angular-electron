@@ -17,7 +17,7 @@ connection.query('CREATE TABLE todos(id int primary key AUTO_INCREMENT, name var
   console.log('table todos créé')
 })
 
-connection.query('INSERT INTO todos (name, done) VALUES (?, ?)', ['test', 0], function(err, result) {
-  if (err) throw err
-    console.log('insert de test ok')
-})
+// connection.query('INSERT INTO todos (name, done) VALUES (?, ?)', ['test', 0], function(err, result) {
+//   if (err) throw err
+//     console.log('insert de test ok')
+// })
