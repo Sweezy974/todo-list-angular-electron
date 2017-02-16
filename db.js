@@ -4,12 +4,12 @@ var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'todo-list2'
+  database: 'todo-list'
 })
 
 connection.connect(function(err) {
   if (err) throw err
-  console.log('You are now connected...')
+  console.log('connecté à la base ')
 })
 
 connection.query('CREATE TABLE todos(id int primary key AUTO_INCREMENT, name varchar(255), done boolean)', function(err, result) {
