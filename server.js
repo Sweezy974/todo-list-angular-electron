@@ -7,7 +7,7 @@ var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'express'
+  database: 'todo-list'
 })
 
 
@@ -17,10 +17,12 @@ connection.connect(function(err) {
 
   })
 
-app.get('/', function(req, res){
-   res.setHeader('Content-Type', 'text/plain');
-   res.end('Voud êtes à l\'accueil');
-   connection.query('SELECT * FROM todos');
+  app.get('/todos', function(req, res){
+    res.setHeader('Content-Type', 'text/plain');
+    connection.query('SELECT * FROM todos', function (error, results, fields) {
+      if (error) throw error;
+      res.json(results);
+    });
   })
 
 //
@@ -55,4 +57,4 @@ app.get('/', function(req, res){
 //     res.send(404, 'Page introuvable !');
 // });
 
-// app.listen(8080);
+app.listen(8080);
