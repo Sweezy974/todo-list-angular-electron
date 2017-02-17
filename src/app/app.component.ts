@@ -2,6 +2,11 @@ import {Component} from '@angular/core';
 import {Todo} from './todo';
 import {TodoDataService} from './todo-data.service';
 
+import { Injectable } from '@angular/core';
+import { Http, Response, Headers,RequestOptions  } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +14,9 @@ import {TodoDataService} from './todo-data.service';
   styleUrls: ['./app.component.css'],
   providers: [TodoDataService]
 })
+
+
+@Injectable()
 export class AppComponent {
 
   newTodo: Todo = new Todo();
@@ -33,5 +41,6 @@ export class AppComponent {
     return this.todoDataService.getAllTodos();
   }
 
-}
+  
 
+}

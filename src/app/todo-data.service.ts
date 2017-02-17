@@ -1,10 +1,16 @@
 import {Injectable} from '@angular/core';
-import { Http, Response }from '@angular/http';
 import {Todo} from './todo';
 import { DbService } from './db.service';
 
+import { Http, Response }from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+
 @Injectable()
 export class TodoDataService {
+  private todoUrl = 'http://localhost:8080/todos';  // URL to web API
+
 
   // Placeholder for last id so we can simulate
   // automatic incrementing of id's
@@ -13,9 +19,10 @@ export class TodoDataService {
   // Placeholder for todo's
   todos: Todo[] = [];
   dbService: any;
-  constructor(dbService: DbService) {
+  constructor(dbService: DbService , private http: Http) {
     this.dbService = dbService;
   }
+
 
   // Simulate ADD /todos
   addTodo(todo: Todo): TodoDataService {
@@ -46,9 +53,30 @@ export class TodoDataService {
   }
 
   // Simulate GET /todos
-  getAllTodos(): Todo[] {
-    return this.dbService.getAll();
+  getAllTodos(): Observable<Todo[]> {
+    return this.http.get(this.todoUrl)
+                    .map(this.extractData)
+                    .catch(this.handleError);
+    // return this.dbService.getAll();
   }
+
+  private extractData(res: Response) {
+   let body = res.json();
+   return body || { };
+ }
+ private handleError (error: Response | any) {
+   // In a real world app, we might use a remote logging infrastructure
+   let errMsg: string;
+   if (error instanceof Response) {
+     const body = error.json() || '';
+     const err = body.error || JSON.stringify(body);
+     errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+   } else {
+     errMsg = error.message ? error.message : error.toString();
+   }
+   console.error(errMsg);
+   return Observable.throw(errMsg);
+ }
 
   // Simulate GET /todos/:id
   getTodoById(id: number): Todo {

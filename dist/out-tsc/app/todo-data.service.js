@@ -9,8 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Injectable } from '@angular/core';
 import { DbService } from './db.service';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 var TodoDataService = (function () {
-    function TodoDataService(dbService) {
+    function TodoDataService(dbService, http) {
+        this.http = http;
+        this.todoUrl = 'http://localhost:8080/todos';
         this.lastId = 0;
         this.todos = [];
         this.dbService = dbService;
@@ -36,7 +42,26 @@ var TodoDataService = (function () {
         return todo;
     };
     TodoDataService.prototype.getAllTodos = function () {
-        return this.dbService.getAll();
+        return this.http.get(this.todoUrl)
+            .map(this.extractData)
+            .catch(this.handleError);
+    };
+    TodoDataService.prototype.extractData = function (res) {
+        var body = res.json();
+        return body || {};
+    };
+    TodoDataService.prototype.handleError = function (error) {
+        var errMsg;
+        if (error instanceof Response) {
+            var body = error.json() || '';
+            var err = body.error || JSON.stringify(body);
+            errMsg = error.status + " - " + (error.statusText || '') + " " + err;
+        }
+        else {
+            errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        return Observable.throw(errMsg);
     };
     TodoDataService.prototype.getTodoById = function (id) {
         return this.todos
@@ -47,7 +72,7 @@ var TodoDataService = (function () {
 }());
 TodoDataService = __decorate([
     Injectable(),
-    __metadata("design:paramtypes", [DbService])
+    __metadata("design:paramtypes", [DbService, Http])
 ], TodoDataService);
 export { TodoDataService };
 //# sourceMappingURL=../../../src/app/todo-data.service.js.map

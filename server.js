@@ -1,5 +1,8 @@
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 var mysql = require('mysql')
 
@@ -24,6 +27,13 @@ connection.connect(function(err) {
       res.json(results);
     });
   })
+ app.post('/new-todo', function(req, res){
+   var data = req.body;
+  connection.query('INSERT INTO todos SET ?', data, function(err, result) {
+    if (err) throw err
+        console.log('insertion dans todo OK')
+  })
+})
 
 //
 // .get('/', function(req, res) {

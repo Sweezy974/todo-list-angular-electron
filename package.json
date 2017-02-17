@@ -23,6 +23,8 @@
     "@angular/platform-browser-dynamic": "^2.3.1",
     "@angular/router": "^3.3.1",
     "@types/nedb": "0.0.31",
+    "@types/node": "^6.0.63",
+    "body-parser": "^1.16.1",
     "core-js": "^2.4.1",
     "express": "^4.14.1",
     "mysql": "^2.13.0",
